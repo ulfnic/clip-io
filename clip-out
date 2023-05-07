@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+
+set -o errexit
+
+print_stderr() {
+	if [[ $1 == '0' ]]; then
+		[[ $2 ]] && printf "$2" "${@:3}" 1>&2
+	else
+		[[ $2 ]] && printf '%s'"$2" "ERROR: ${0##*/}, " "${@:3}" 1>&2
+		exit "$1"
+	fi
+}
+
+
+
+# Detect display server
+if [[ $DISPLAY ]]; then
+	[[ $WAYLAND_DISPLAY ]] && display_server='xwayland' || display_server='x11'
+else
+	display_server='wayland'
+fi
+
+
+
+# Test dependencies and send clipboard to stdout
+if [[ $display_server == 'wayland' ]] || [[ $display_server == 'xwayland' ]]; then
+	type wl-paste &> /dev/null || print_stderr 1 'Missing dependency: wl-paste'
+	wl-paste
+
+elif [[ $display_server == 'x11' ]]; then
+	if type xclip &> /dev/null; then
+		xclip -out -selection clipboard
+	elif type xsel &> /dev/null; then
+		xsel --clipboard --output
+	else
+		print_stderr 1 'missing dependency: xsel or xclip'
+	fi
+fi
