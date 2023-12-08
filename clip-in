@@ -14,6 +14,19 @@ print_stderr() {
 
 
 
+remove_trailing_nl=
+while [[ $1 ]]; do
+	case $1 in
+		'-r')
+			remove_trailing_nl=1 ;;
+		*)
+			print_stderr 1 '%s\n' 'unrecognized parameter: '"$1" ;;
+	esac
+	shift
+done
+
+
+
 # Define display server
 if [[ $DISPLAY ]]; then
 	[[ $WAYLAND_DISPLAY ]] && display_server='xwayland' || display_server='x11'
@@ -39,4 +52,11 @@ elif [[ $display_server == 'x11' ]]; then
 fi
 
 
-$clipboard_cmd < /dev/fd/0
+
+if [[ $remove_trailing_nl ]]; then
+	$clipboard_cmd < <(tr -d '\n' < /dev/fd/0)
+else
+	$clipboard_cmd < /dev/fd/0
+fi
+
+
