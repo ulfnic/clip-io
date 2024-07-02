@@ -25,6 +25,16 @@ for _ in :; do
 	fi
 
 
+	# Termux
+	if [[ $SHELL == *'com.termux'* ]]; then
+		type termux-clipboard-get 1>/dev/null
+		clipboard() {
+			termux-clipboard-get
+		}
+		break
+	fi
+
+
 	# X11
 	if [[ $DISPLAY ]]; then
 		if type xclip &> /dev/null; then
