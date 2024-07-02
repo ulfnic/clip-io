@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-
-
 set -o errexit
+
 
 print_stderr() {
 	if [[ $1 == '0' ]]; then
@@ -27,36 +26,49 @@ done
 
 
 
-# Define display server
-if [[ $DISPLAY ]]; then
-	[[ $WAYLAND_DISPLAY ]] && display_server='xwayland' || display_server='x11'
-else
-	display_server='wayland'
-fi
+# Check dependencies and define clipboard function based on environment
+for _ in :; do
+	# Wayland
+	if [[ $WAYLAND_DISPLAY ]]; then
+		type wl-copy 1>/dev/null
+		clipboard() {
+			wl-copy
+		}
+		break
+	fi
 
 
+	# X11
+	if [[ $DISPLAY ]]; then
+		if type xclip &> /dev/null; then
+			clipboard() {
+				xclip -in -selection clipboard
+			}
+			break
+		fi
 
-# Test dependencies and define clipboard command
-if [[ $display_server == 'wayland' ]] || [[ $display_server == 'xwayland' ]]; then
-	type wl-copy &> /dev/null || print_stderr 1 'missing dependency: wl-copy'
-	clipboard_cmd='wl-copy'
+		if type xsel &> /dev/null; then
+			clipboard() {
+				xsel --input --clipboard
+			}
+			break
+		fi
 
-elif [[ $display_server == 'x11' ]]; then
-	if type xclip &> /dev/null; then
-		clipboard_cmd='xclip -in -selection clipboard'
-	elif type xsel &> /dev/null; then
-		clipboard_cmd='xsel --input --clipboard'
-	else
 		print_stderr 1 'missing dependency: xsel or xclip'
 	fi
-fi
+
+
+	print_stderr 1 '%s\n' 'no eligible environment found'
+done
 
 
 
 if [[ $remove_trailing_nl ]]; then
-	$clipboard_cmd < <(tr -d '\n' < /dev/fd/0)
-else
-	$clipboard_cmd < /dev/fd/0
+	clipboard < <(tr -d '\n' < /dev/fd/0)
+	exit $?
 fi
+
+clipboard < /dev/fd/0
+
 
 
