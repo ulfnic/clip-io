@@ -16,7 +16,14 @@ X11:
 Wayland:
   - wl-copy 
   - wl-paste
+
+Termux:
+  - termux-clipboard-set
+  - termux-clipboard-get
 ```
+### Note:
+
+`termux-clipboard-{get,set}` will hang unless the [Termux:API](https://wiki.termux.com/wiki/Termux:API) addon is installed.
 
 ## Examples
 ```bash
