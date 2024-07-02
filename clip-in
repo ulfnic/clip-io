@@ -38,6 +38,7 @@ for _ in :; do
 	fi
 
 
+
 	# X11
 	if [[ $DISPLAY ]]; then
 		if type xclip &> /dev/null; then
