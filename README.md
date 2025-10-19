@@ -20,7 +20,7 @@ Writes stdin into the system clipboard using the appropriate command for the env
 
 ARGUEMENT
 	-r                         Remove all trailing newlines from INPUT
-	-c                         Clear clipboard, ignores INPUT
+	-c|--clear                 Clear clipboard, ignores INPUT
 	-C|--clear-after SECONDS   Clear clipboard if contents are the same as INPUT after SECONDS
 	-h|--help                  Print help doc
 
@@ -34,7 +34,7 @@ DEPENDENCIES
 
 	ARGUEMENTs
 		-r                 tr
-		-c                 clip-in
+		-c|--clear         clip-in
 		-C|--clear-after   clip-in, clip-out, md5sum, sleep
 
 EXAMPLES
@@ -57,9 +57,9 @@ clip-out [ARGUEMENT...]
 Writes system clipboard to stdout using the appropriate command for the environment.
 
 ARGUEMENT
-	-r          Remove all trailing newlines from output
-	-c          Clear clipboard after writing contents
-	-h|--help   Print help doc
+	-r           Remove all trailing newlines from output
+	-c|--clear   Clear clipboard after writing contents
+	-h|--help    Print help doc
 
 DEPENDENCIES
 	Environments
@@ -70,8 +70,8 @@ DEPENDENCIES
 	Note: termux-clipboard-get will hang unless the Termux:API addon is installed.
 
 	ARGUEMENTs
-		-r   tr
-		-c   clip-in
+		-r           tr
+		-c|--clear   clip-in
 
 EXAMPLES
 	# Write clipboard to a file

@@ -10,7 +10,7 @@ help_doc() {
 
 		|ARGUEMENT
 		|	-r                         Remove all trailing newlines from INPUT
-		|	-c                         Clear clipboard, ignores INPUT
+		|	-c|--clear                 Clear clipboard, ignores INPUT
 		|	-C|--clear-after SECONDS   Clear clipboard if contents are the same as INPUT after SECONDS
 		|	-h|--help                  Print help doc
 
@@ -24,7 +24,7 @@ help_doc() {
 		|
 		|	ARGUEMENTs
 		|		-r                 tr
-		|		-c                 clip-in
+		|		-c|--clear         clip-in
 		|		-C|--clear-after   clip-in, clip-out, md5sum, sleep
 
 		|EXAMPLES
@@ -60,7 +60,7 @@ while [[ $1 ]]; do
 	case $1 in
 		'-r')
 			remove_trailing_nl=1 ;;
-		'-c')
+		'-c'|'--clear')
 			clear_clipboard=1 ;;
 		'-C'|'--clear-after')
 			shift; clear_after_sec=$1 ;;

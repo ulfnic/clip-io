@@ -9,9 +9,9 @@ help_doc() {
 		|Writes system clipboard to stdout using the appropriate command for the environment.
 
 		|ARGUEMENT
-		|	-r          Remove all trailing newlines from output
-		|	-c          Clear clipboard after writing contents
-		|	-h|--help   Print help doc
+		|	-r           Remove all trailing newlines from output
+		|	-c|--clear   Clear clipboard after writing contents
+		|	-h|--help    Print help doc
 
 		|DEPENDENCIES
 		|	Environments
@@ -22,8 +22,8 @@ help_doc() {
 		|	Note: termux-clipboard-get will hang unless the Termux:API addon is installed.
 		|
 		|	ARGUEMENTs
-		|		-r   tr
-		|		-c   clip-in
+		|		-r           tr
+		|		-c|--clear   clip-in
 
 		|EXAMPLES
 		|	# Write clipboard to a file
@@ -51,7 +51,7 @@ while [[ $1 ]]; do
 	case $1 in
 		'-r')
 			remove_trailing_nl=1 ;;
-		'-c')
+		'-c'|'--clear')
 			clear_after_write=1 ;;
 		'--help'|'-h')
 			help_doc 0 ;;
