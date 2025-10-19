@@ -26,7 +26,6 @@ help_doc() {
 		|EXAMPLES
 		|	# Write clipboard to a file
 		|	clip-out > clipboard.txt
-
 	HelpDoc
 	[[ $1 ]] && exit "$1"
 }

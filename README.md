@@ -41,7 +41,6 @@ EXAMPLES
 
 	# Clear clipboard if it contains "my secret" after 8 seconds
 	printf '%s' 'my secret' | clip-in --clear-after 8
-
 ```
 ```bash
 clip-out --help
@@ -69,5 +68,4 @@ DEPENDENCIES
 EXAMPLES
 	# Write clipboard to a file
 	clip-out > clipboard.txt
-
 ```

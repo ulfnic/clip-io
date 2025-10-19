@@ -34,7 +34,6 @@ help_doc() {
 		|
 		|	# Clear clipboard if it contains "my secret" after 8 seconds
 		|	printf '%s' 'my secret' | clip-in --clear-after 8
-
 	HelpDoc
 	[[ $1 ]] && exit "$1"
 }
