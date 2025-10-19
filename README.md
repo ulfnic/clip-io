@@ -52,6 +52,7 @@ clip-out [ARGUEMENT...]
 Writes system clipboard to stdout using the appropriate command for the environment.
 
 ARGUEMENT
+	-r          Remove all trailing newlines from output
 	-h|--help   Print help doc
 
 DEPENDENCIES
@@ -61,6 +62,9 @@ DEPENDENCIES
 		Termux    termux-clipboard-get
 
 	Note: termux-clipboard-get will hang unless the Termux:API addon is installed.
+
+	ARGUEMENTs
+		-r   tr
 
 EXAMPLES
 	# Write clipboard to a file
