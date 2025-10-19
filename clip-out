@@ -2,6 +2,33 @@
 set -o errexit
 
 
+help_doc() {
+	{ read -r -d '' || :; [[ $REPLY == '|'* ]] && REPLY=${REPLY:1}; printf '%s' "${REPLY//$'\n|'/$'\n'}"; } <<-'HelpDoc'
+		|clip-out [ARGUEMENT...]
+		|
+		|Writes system clipboard to stdout using the appropriate command for the environment.
+
+		|ARGUEMENT
+		|	-h|--help   Print help doc
+
+		|DEPENDENCIES
+		|	Environments
+		|		X11       xclip || xsel
+		|		Wayland   wl-paste
+		|		Termux    termux-clipboard-get
+		|
+		|	Note: termux-clipboard-get will hang unless the Termux:API addon is installed.
+
+		|EXAMPLES
+		|	# Write clipboard to a file
+		|	clip-out > clipboard.txt
+
+	HelpDoc
+	[[ $1 ]] && exit "$1"
+}
+
+
+
 print_stderr() {
 	if [[ $1 == '0' ]]; then
 		[[ $2 ]] && printf "$2" "${@:3}" 1>&2
@@ -10,6 +37,18 @@ print_stderr() {
 		exit "$1"
 	fi
 }
+
+
+
+while [[ $1 ]]; do
+	case $1 in
+		'--help'|'-h')
+			help_doc 0 ;;
+		*)
+			print_stderr 1 '%s\n' 'unrecognized parameter: '"$1" ;;
+	esac
+	shift
+done
 
 
 

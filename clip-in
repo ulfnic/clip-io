@@ -2,6 +2,45 @@
 set -o errexit
 
 
+help_doc() {
+	{ read -r -d '' || :; [[ $REPLY == '|'* ]] && REPLY=${REPLY:1}; printf '%s' "${REPLY//$'\n|'/$'\n'}"; } <<-'HelpDoc'
+		|clip-in [ARGUEMENT...] [< INPUT]
+		|
+		|Writes stdin into the system clipboard using the appropriate command for the environment.
+
+		|ARGUEMENT
+		|	-r                         Remove all trailing newlines from INPUT
+		|	-C|--clear-after SECONDS   Clear clipboard if contents are the same as INPUT after SECONDS
+		|	-h|--help                  Print help doc
+
+		|DEPENDENCIES
+		|	Environments
+		|		X11       xclip || xsel
+		|		Wayland   wl-copy
+		|		Termux    termux-clipboard-set
+		|
+		|	Note: termux-clipboard-set will hang unless the Termux:API addon is installed.
+		|
+		|	ARGUEMENTs
+		|		-r                 tr
+		|		-C|--clear-after   clip-in, clip-out, md5sum, sleep
+
+		|EXAMPLES
+		|	# Pipe current date into clipboard
+		|	date | clip-in
+		|
+		|	# Remove all trailing newlines from INPUT
+		|	printf '%s\n\n\n' 'no newline(s) after this' | clip-in -r
+		|
+		|	# Clear clipboard if it contains "my secret" after 8 seconds
+		|	printf '%s' 'my secret' | clip-in --clear-after 8
+
+	HelpDoc
+	[[ $1 ]] && exit "$1"
+}
+
+
+
 print_stderr() {
 	if [[ $1 == '0' ]]; then
 		[[ $2 ]] && printf "$2" "${@:3}" 1>&2
@@ -21,6 +60,8 @@ while [[ $1 ]]; do
 			remove_trailing_nl=1 ;;
 		'-C'|'--clear-after')
 			shift; clear_after=$1 ;;
+		'--help'|'-h')
+			help_doc 0 ;;
 		*)
 			print_stderr 1 '%s\n' 'unrecognized parameter: '"$1" ;;
 	esac
