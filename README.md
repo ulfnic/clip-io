@@ -1,25 +1,27 @@
 # clip-io
 
-A package agnostic shim for piping stdout into clipboard and printing clipboard to stdout.
+Shim for writing/reading a UNIX-like system's clipboard using the appropriate command for the environment.
 
 ```bash
-printf '%s\n' 'hello' | clip-in; clip-out
+printf '%s\n' 'hello' | clip-in
+clip-out
 # stdout: hello
 ```
 
 ## Dependencies
-clip-io uses the following dependencies according to the environment:
+clip-io writes stdin to the following commands according to the environment and their availability.
 ```bash
-X11: 
-  - xclip | xsel 
+# X11
+clip-out: xclip -selection clipboard -out || xsel --clipboard --output
+ clip-in: xclip -selection clipboard -in  || xsel --clipboard --input
 
-Wayland:
-  - wl-copy 
-  - wl-paste
+# Wayland
+clip-out: wl-paste
+ clip-in: wl-copy
 
-Termux:
-  - termux-clipboard-set
-  - termux-clipboard-get
+# Termux
+clip-out: termux-clipboard-get
+ clip-in: termux-clipboard-set
 ```
 ### Note:
 
@@ -30,14 +32,14 @@ Termux:
 # Write clipboard to a file
 clip-out > clipboard.txt
 
-# Pipe a command into clipboard
+# Pipe current date into the clipboard
 date | clip-in
 
-# Pipe a heredoc into clipboard removing trailing newlines
-clip-in -r <<-'EOF'
-	hello for a heredoc
+# Remove all trailing newlines
+printf '%s\n\n\n' 'no newline(s) after this' | clip-in -r
+
+# Pipe a heredoc into clipboard
+clip-in <<-'EOF'
+	hello from a heredoc
 EOF
 ```
-
-## License
-Licensed under Zero-Clause BSD (0BSD). See LICENSE for details.
