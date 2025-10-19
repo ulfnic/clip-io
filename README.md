@@ -56,6 +56,7 @@ Writes system clipboard to stdout using the appropriate command for the environm
 
 ARGUEMENT
 	-r          Remove all trailing newlines from output
+	-c          Clear clipboard after writing contents
 	-h|--help   Print help doc
 
 DEPENDENCIES
@@ -68,6 +69,7 @@ DEPENDENCIES
 
 	ARGUEMENTs
 		-r   tr
+		-c   clip-in
 
 EXAMPLES
 	# Write clipboard to a file
