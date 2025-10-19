@@ -59,6 +59,10 @@ done
 
 
 
+[[ $remove_trailing_nl ]] && type tr 1>/dev/null
+
+
+
 # Check dependencies and define clipboard function based on environment
 for _ in :; do
 	# Wayland
