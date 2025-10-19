@@ -7,39 +7,63 @@ printf '%s\n' 'hello' | clip-in
 clip-out
 # stdout: hello
 ```
-
-## Dependencies
-clip-io writes stdin to the following commands according to the environment and their availability.
 ```bash
-# X11
-clip-out: xclip -selection clipboard -out || xsel --clipboard --output
- clip-in: xclip -selection clipboard -in  || xsel --clipboard --input
-
-# Wayland
-clip-out: wl-paste
- clip-in: wl-copy
-
-# Termux
-clip-out: termux-clipboard-get
- clip-in: termux-clipboard-set
+clip-in --help
 ```
-### Note:
-
-`termux-clipboard-{get,set}` will hang unless the [Termux:API](https://wiki.termux.com/wiki/Termux:API) addon is installed.
-
-## Examples
 ```bash
-# Write clipboard to a file
-clip-out > clipboard.txt
+clip-in [ARGUEMENT...] [< INPUT]
 
-# Pipe current date into the clipboard
-date | clip-in
+Writes stdin into the system clipboard using the appropriate command for the environment.
 
-# Remove all trailing newlines
-printf '%s\n\n\n' 'no newline(s) after this' | clip-in -r
+ARGUEMENT
+	-r                         Remove all trailing newlines from INPUT
+	-C|--clear-after SECONDS   Clear clipboard if contents are the same as INPUT after SECONDS
+	-h|--help                  Print help doc
 
-# Pipe a heredoc into clipboard
-clip-in <<-'EOF'
-	hello from a heredoc
-EOF
+DEPENDENCIES
+	Environments
+		X11       xclip || xsel
+		Wayland   wl-copy
+		Termux    termux-clipboard-set
+
+	Note: termux-clipboard-set will hang unless the Termux:API addon is installed.
+
+	ARGUEMENTs
+		-r                 tr
+		-C|--clear-after   clip-in, clip-out, md5sum, sleep
+
+EXAMPLES
+	# Pipe current date into clipboard
+	date | clip-in
+
+	# Remove all trailing newlines from INPUT
+	printf '%s\n\n\n' 'no newline(s) after this' | clip-in -r
+
+	# Clear clipboard if it contains "my secret" after 8 seconds
+	printf '%s' 'my secret' | clip-in --clear-after 8
+
+```
+```bash
+clip-out --help
+```
+```bash
+clip-out [ARGUEMENT...]
+
+Writes system clipboard to stdout using the appropriate command for the environment.
+
+ARGUEMENT
+	-h|--help   Print help doc
+
+DEPENDENCIES
+	Environments
+		X11       xclip || xsel
+		Wayland   wl-paste
+		Termux    termux-clipboard-get
+
+	Note: termux-clipboard-get will hang unless the Termux:API addon is installed.
+
+EXAMPLES
+	# Write clipboard to a file
+	clip-out > clipboard.txt
+
 ```
