@@ -10,6 +10,7 @@ help_doc() {
 
 		|ARGUEMENT
 		|	-r                         Remove all trailing newlines from INPUT
+		|	-c                         Clear clipboard, ignores INPUT
 		|	-C|--clear-after SECONDS   Clear clipboard if contents are the same as INPUT after SECONDS
 		|	-h|--help                  Print help doc
 
@@ -23,6 +24,7 @@ help_doc() {
 		|
 		|	ARGUEMENTs
 		|		-r                 tr
+		|		-c                 clip-in
 		|		-C|--clear-after   clip-in, clip-out, md5sum, sleep
 
 		|EXAMPLES
@@ -52,11 +54,14 @@ print_stderr() {
 
 
 remove_trailing_nl=
+clear_clipboard=
 clear_after_sec=
 while [[ $1 ]]; do
 	case $1 in
 		'-r')
 			remove_trailing_nl=1 ;;
+		'-c')
+			clear_clipboard=1 ;;
 		'-C'|'--clear-after')
 			shift; clear_after_sec=$1 ;;
 		'--help'|'-h')
@@ -69,10 +74,14 @@ done
 
 
 
-[[ $remove_trailing_nl ]] && type tr 1>/dev/null
-if [[ $clear_after_sec ]]; then
-	type clip-in clip-out md5sum sleep 1>/dev/null
-	[[ $clear_after_sec != *[^0123456789]* ]] || print_stderr 1 '%s %q\n' '--clear-after value not a whole number:' "$clear_after_sec"
+if [[ $clear_clipboard ]]; then
+	type clip-in 1>/dev/null
+else
+	[[ $remove_trailing_nl ]] && type tr 1>/dev/null
+	if [[ $clear_after_sec ]]; then
+		type clip-in clip-out md5sum sleep 1>/dev/null
+		[[ $clear_after_sec != *[^0123456789]* ]] || print_stderr 1 '%s %q\n' '--clear-after value not a whole number:' "$clear_after_sec"
+	fi
 fi
 
 
@@ -121,6 +130,13 @@ for _ in :; do
 
 	print_stderr 1 '%s\n' 'no eligible environment found'
 done
+
+
+
+if [[ $clear_clipboard ]]; then
+	clip-in < <(printf '')
+	exit
+fi
 
 
 

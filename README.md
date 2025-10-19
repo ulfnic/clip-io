@@ -20,6 +20,7 @@ Writes stdin into the system clipboard using the appropriate command for the env
 
 ARGUEMENT
 	-r                         Remove all trailing newlines from INPUT
+	-c                         Clear clipboard, ignores INPUT
 	-C|--clear-after SECONDS   Clear clipboard if contents are the same as INPUT after SECONDS
 	-h|--help                  Print help doc
 
@@ -33,6 +34,7 @@ DEPENDENCIES
 
 	ARGUEMENTs
 		-r                 tr
+		-c                 clip-in
 		-C|--clear-after   clip-in, clip-out, md5sum, sleep
 
 EXAMPLES
