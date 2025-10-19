@@ -1,12 +1,15 @@
 # clip-io
 
-Shim for writing/reading a UNIX-like system's clipboard using the appropriate command for the environment.
+Package agnostic shims for working with a system's clipboard through UNIX pipes.
 
 ```bash
+# X11, Wayland, or Android
 printf '%s\n' 'hello' | clip-in
+
 clip-out
 # stdout: hello
 ```
+---
 ```bash
 clip-in --help
 ```
@@ -42,6 +45,7 @@ EXAMPLES
 	# Clear clipboard if it contains "my secret" after 8 seconds
 	printf '%s' 'my secret' | clip-in --clear-after 8
 ```
+---
 ```bash
 clip-out --help
 ```
