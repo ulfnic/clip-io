@@ -39,7 +39,7 @@ for _ in :; do
 	if [[ $DISPLAY ]]; then
 		if type xclip &> /dev/null; then
 			clipboard() {
-				xclip -out -selection clipboard
+				xclip -selection clipboard -out
 			}
 			break
 		fi

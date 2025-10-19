@@ -52,14 +52,14 @@ for _ in :; do
 	if [[ $DISPLAY ]]; then
 		if type xclip &> /dev/null; then
 			clipboard() {
-				xclip -in -selection clipboard
+				xclip -selection clipboard -in
 			}
 			break
 		fi
 
 		if type xsel &> /dev/null; then
 			clipboard() {
-				xsel --input --clipboard
+				xsel --clipboard --input
 			}
 			break
 		fi
